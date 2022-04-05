@@ -7,9 +7,9 @@ def main():
     enddate = '01/04/2022'
     stock = spsi.Stock(ticker, startdate, enddate)
 
-    stock.history_price()
-    stock.candlestick()
-    stock.Ohlc()
+    # stock.history_price()
+    # stock.candlestick()
+    # stock.Ohlc()
 
 if __name__ == "__main__":
     main()
