@@ -15,11 +15,11 @@ plotly == 5.6.0
 
 ![](https://i.imgur.com/wy5l53p.jpg)
 
-`history price`
+## history price
 ![](https://i.imgur.com/y6pCUNh.png)
 
-`candlestick`
+## candlestick
 ![](https://i.imgur.com/2sOpoF2.png)
 
-`ohlc`
+## ohlc
 ![](https://i.imgur.com/R4mqQUh.png)
