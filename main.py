@@ -8,8 +8,8 @@ def main():
     stock = spsi.Stock(ticker, startdate, enddate)
 
     stock.history_price()
-    # stock.candlestick()
-    # stock.Ohlc()
+    stock.candlestick()
+    stock.Ohlc()
 
 if __name__ == "__main__":
     main()
