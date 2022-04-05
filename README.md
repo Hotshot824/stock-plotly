@@ -10,3 +10,7 @@ yahoo_fin == 0.8.9.1
 
 plotly == 5.6.0
 ```
+
+## history_price dataset
+
+![](https://i.imgur.com/wy5l53p.jpg)
