@@ -1,4 +1,5 @@
 from enum import Flag
+from turtle import title
 import yahoo_fin.stock_info as si
 import plotly.express as px
 import plotly.graph_objects as go
@@ -31,4 +32,20 @@ class Stock():
         fig.show()
 
     def candlestick(self):
-        pass
+        df = self.__history_price
+        fig = go.Figure(
+            data = [go.Candlestick(
+                x = df.date,
+                open = df.open,
+                high = df.high,
+                low = df.low,
+                close = df.close,
+                increasing_line_color = 'red',
+                decreasing_line_color = 'green'
+            )],
+            layout = go.Layout(
+                title=go.layout.Title(text=self.__ticker.upper())
+    )
+        )
+
+        fig.show()
