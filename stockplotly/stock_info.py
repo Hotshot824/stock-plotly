@@ -26,9 +26,20 @@ class Stock():
         df["ma60"] = df["adjclose"].rolling(60).mean()
 
         fig = px.line(df, x="date", y='adjclose', title=self.__ticker.upper()+suffix)
-        fig.add_trace(go.Scatter(x=df.date, y=df.ma10,name="Ma10"))
-        fig.add_trace(go.Scatter(x=df.date, y=df.ma20,name="Ma20"))
-        fig.add_trace(go.Scatter(x=df.date, y=df.ma60,name="Ma60"))
+        fig.add_trace(go.Scatter(x=df.date, y=df.ma10,name="Ma10", line = dict(width=1)))
+        fig.add_trace(go.Scatter(x=df.date, y=df.ma20,name="Ma20", line = dict(width=1)))
+        fig.add_trace(go.Scatter(x=df.date, y=df.ma60,name="Ma60", line = dict(width=1)))
+
+        fig.update_xaxes(
+            rangeslider_visible=True,   
+            rangeselector=dict(
+                buttons=list([
+                    dict(count=6, label="6m", step="month", stepmode="backward"),
+                    dict(count=1, label="1y", step="year", stepmode="backward"),
+                    dict(step="all")
+                ])
+            )
+        )
 
         fig.show()
 
