@@ -76,3 +76,6 @@ class Stock():
         )
 
         fig.show()
+
+    def history_price_area():
+        pass
