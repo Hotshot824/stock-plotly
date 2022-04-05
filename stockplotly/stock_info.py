@@ -27,5 +27,8 @@ class Stock():
         fig.add_trace(go.Scatter(x=df.date, y=df.ma10,name="Ma10"))
         fig.add_trace(go.Scatter(x=df.date, y=df.ma20,name="Ma20"))
         fig.add_trace(go.Scatter(x=df.date, y=df.ma60,name="Ma60"))
-        
+
         fig.show()
+
+    def candlestick(self):
+        pass
