@@ -26,6 +26,8 @@ plotly == 5.6.0
 
 ## Treemap
 
+![](https://github.com/Hotshot824/stock-plotly/blob/main/img/2022-0406-1936/treemap%20dataset_2.JPG?raw=true)
+
 ![](https://github.com/Hotshot824/stock-plotly/blob/main/img/2022-0406-1936/treemap%20dataset.JPG?raw=true)
 
 ![](https://github.com/Hotshot824/stock-plotly/blob/main/img/2022-0406-1936/tmap.png?raw=true)
