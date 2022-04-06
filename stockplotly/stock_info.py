@@ -3,6 +3,7 @@ from turtle import title
 import yahoo_fin.stock_info as si
 import plotly.express as px
 import plotly.graph_objects as go
+import plotly.subplots as ms
 
 
 class Stock():
@@ -45,48 +46,6 @@ class Stock():
 
         fig.show()
 
-    def candlestick(self):
-        df = self.__history_price
-        suffix = ' Candlestick'
-        fig = go.Figure(
-            data = [go.Candlestick(
-                x = df.date,
-                open = df.open,
-                high = df.high,
-                low = df.low,
-                close = df.close,
-                increasing_line_color = 'red',
-                decreasing_line_color = 'green'
-            )],
-            layout = go.Layout(title=go.layout.Title(text=self.__ticker.upper()+suffix))
-        )
-
-        fig.add_trace(go.Scatter(x=df.date, y=df.ma10,name="Ma10", line = dict(width=1)))
-        fig.add_trace(go.Scatter(x=df.date, y=df.ma20,name="Ma20", line = dict(width=1)))
-        fig.add_trace(go.Scatter(x=df.date, y=df.ma60,name="Ma60", line = dict(width=1)))
-
-        fig.show()
-
-    def Ohlc(self):
-        df = self.__history_price
-        suffix = ' Ohlc'
-        fig = go.Figure(
-            data = [go.Ohlc(
-                x = df.date,
-                open = df.open,
-                high = df.high,
-                low = df.low,
-                close = df.close,
-            )],
-            layout = go.Layout(title=go.layout.Title(text=self.__ticker.upper()+suffix))
-        )
-
-        fig.add_trace(go.Scatter(x=df.date, y=df.ma10,name="Ma10", line = dict(width=1)))
-        fig.add_trace(go.Scatter(x=df.date, y=df.ma20,name="Ma20", line = dict(width=1)))
-        fig.add_trace(go.Scatter(x=df.date, y=df.ma60,name="Ma60", line = dict(width=1)))
-
-        fig.show()
-
     def history_price_area(self):
         df = self.__history_price
         suffix = ' Price Area'
@@ -102,5 +61,93 @@ class Stock():
                 ])
             )
         )
+
+        fig.show()
+
+    def candlestick(self):
+        df = self.__history_price
+        suffix = ' Candlestick'
+
+        fig = ms.make_subplots(
+            rows=2, cols=1, 
+            shared_xaxes=True, 
+            vertical_spacing=0.03, 
+            row_width=[0.2, 0.8],
+        )
+
+        #Plot candlestick on 1st row
+        fig.add_trace(
+            go.Candlestick(
+                x=df["date"], 
+                open=df["open"], 
+                high=df["high"],
+                low=df["low"],
+                close=df["close"], 
+                name="Candlestick"
+            ), 
+            row=1, col=1
+        )
+
+        fig.add_trace(go.Scatter(x=df.date, y=df.ma10,name="Ma10", line = dict(width=1)))
+        fig.add_trace(go.Scatter(x=df.date, y=df.ma20,name="Ma20", line = dict(width=1)))
+        fig.add_trace(go.Scatter(x=df.date, y=df.ma60,name="Ma60", line = dict(width=1)))
+
+        #Bar trace for volumes on 2nd row without legend
+        fig.add_trace(
+            go.Bar(
+                x=df['date'], 
+                y=df['volume'], 
+                showlegend=False
+            ), 
+            row=2, col=1
+        )
+
+        #Do not show candlestick's rangeslider plot 
+        fig.update(layout_xaxis_rangeslider_visible=False)
+        fig.update_layout(title_text=self.__ticker.upper()+suffix)
+
+        fig.show()
+
+    def Ohlc(self):
+        df = self.__history_price
+        suffix = ' Ohlc'
+
+        fig = ms.make_subplots(
+            rows=2, cols=1, 
+            shared_xaxes=True, 
+            vertical_spacing=0.03, 
+            row_width=[0.2, 0.8],
+        )
+
+        #Plot Ohlc on 1st row
+        fig.add_trace(
+            go.Ohlc(
+                x=df["date"], 
+                open=df["open"], 
+                high=df["high"],
+                low=df["low"],
+                close=df["close"], 
+                name="OHLC"
+            ), 
+            row=1, col=1
+        )
+
+        fig.add_trace(go.Scatter(x=df.date, y=df.ma10,name="Ma10", line = dict(width=1)))
+        fig.add_trace(go.Scatter(x=df.date, y=df.ma20,name="Ma20", line = dict(width=1)))
+        fig.add_trace(go.Scatter(x=df.date, y=df.ma60,name="Ma60", line = dict(width=1)))
+
+        #Bar trace for volumes on 2nd row without legend
+        fig.add_trace(
+            go.Bar(
+                x=df['date'], 
+                y=df['volume'], 
+                showlegend=False
+            ), 
+            row=2, col=1
+        )
+
+        #Do not show OHLC's rangeslider plot 
+        fig.update(layout_xaxis_rangeslider_visible=False)
+        fig.update_layout(title_text=self.__ticker.upper()+suffix)
 
         fig.show()
