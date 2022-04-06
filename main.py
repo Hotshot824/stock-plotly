@@ -13,9 +13,9 @@ def main():
     # stock.candlestick()
     # stock.Ohlc()
 
-    market = spsi.Market()
-
-    market.Treemap_exmaple()
+    #  market = spsi.Market()
+    print("Hello test")
+    # market.Treemap_exmaple()
 
 if __name__ == "__main__":
     main()
