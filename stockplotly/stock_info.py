@@ -77,5 +77,9 @@ class Stock():
 
         fig.show()
 
-    def history_price_area():
-        pass
+    def history_price_area(self):
+        df = self.__history_price
+        suffix = ' Price Area'
+        fig = px.area(x=df.date, y=df.adjclose, title=self.__ticker.upper()+suffix)
+
+        fig.show()
