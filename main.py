@@ -14,7 +14,6 @@ def main():
     # stock.Ohlc()
 
     #  market = spsi.Market()
-    print("Hello test")
     # market.Treemap_exmaple()
 
 if __name__ == "__main__":
