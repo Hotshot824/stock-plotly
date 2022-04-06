@@ -4,7 +4,7 @@ import stockplotly.basic as ba
 def main():
     #stock parameter
     ticker = 'msft'
-    startdate = '01/12/2021'
+    startdate = '01/12/2020'
     enddate = '01/04/2022'
     stock = spsi.Stock(ticker, startdate, enddate)
 
