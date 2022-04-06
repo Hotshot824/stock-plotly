@@ -1,5 +1,6 @@
 from enum import Flag
 from turtle import title
+from datetime import datetime
 import yahoo_fin.stock_info as si
 import plotly.express as px
 import plotly.graph_objects as go
@@ -158,11 +159,13 @@ class Market():
     def __init__(self):
         self.__day_gainers = si.get_day_gainers()
 
-    def Treemap_exmaple(self):
-        df = px.data.tips()
-        fig = px.treemap(df, path=['day', 'time', 'sex'], values='total_bill')
-        fig.show()
-
-    def Treemap(self):
+    def Treemap_volume(self):
         df = self.__day_gainers
-        print(df)
+        date = datetime.now().strftime('%Y/%m/%d %H:%M:%S')
+        suffix = ' Volume'
+
+        fig = px.treemap(
+            df, path=[px.Constant("Symbol"),'Symbol'], values='Change',
+            color='Change', color_continuous_scale='Portland',
+            title=date+suffix)
+        fig.show()

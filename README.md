@@ -24,7 +24,9 @@ plotly == 5.6.0
 ## ohlc
 ![](https://i.imgur.com/R4mqQUh.png)
 
-## Treemap
+## Treemap 
+
+- [ ] Market Cap (Intraday) 計算市值未完成
 
 ![](https://github.com/Hotshot824/stock-plotly/blob/main/img/2022-0406-1936/treemap%20dataset_2.JPG?raw=true)
 
