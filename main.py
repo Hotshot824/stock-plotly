@@ -8,10 +8,14 @@ def main():
     enddate = '01/04/2022'
     stock = spsi.Stock(ticker, startdate, enddate)
 
-    stock.history_price()
-    stock.history_price_area()
-    stock.candlestick()
-    stock.Ohlc()
+    # stock.history_price()
+    # stock.history_price_area()
+    # stock.candlestick()
+    # stock.Ohlc()
+
+    market = spsi.Market()
+
+    market.Treemap_exmaple()
 
 if __name__ == "__main__":
     main()

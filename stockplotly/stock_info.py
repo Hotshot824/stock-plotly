@@ -151,3 +151,18 @@ class Stock():
         fig.update_layout(title_text=self.__ticker.upper()+suffix)
 
         fig.show()
+
+
+class Market():
+
+    def __init__(self):
+        self.__day_gainers = si.get_day_gainers()
+
+    def Treemap_exmaple(self):
+        df = px.data.tips()
+        fig = px.treemap(df, path=['day', 'time', 'sex'], values='total_bill')
+        fig.show()
+
+    def Treemap(self):
+        df = self.__day_gainers
+        print(df)
