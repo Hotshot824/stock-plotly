@@ -4,6 +4,7 @@ import yahoo_fin.stock_info as si
 import plotly.express as px
 import plotly.graph_objects as go
 
+
 class Stock():
 
     def __init__(self, ticker, start_date, end_date):
@@ -18,12 +19,13 @@ class Stock():
             index_as_date=False,
         )
 
+        self.__history_price["ma10"] = self.__history_price["adjclose"].rolling(10).mean()
+        self.__history_price["ma20"] = self.__history_price["adjclose"].rolling(20).mean()
+        self.__history_price["ma60"] = self.__history_price["adjclose"].rolling(60).mean()
+
     def history_price(self):
         df = self.__history_price
         suffix = ' History Price'
-        df["ma10"] = df["adjclose"].rolling(10).mean()
-        df["ma20"] = df["adjclose"].rolling(20).mean()
-        df["ma60"] = df["adjclose"].rolling(60).mean()
 
         fig = px.line(df, x="date", y='adjclose', title=self.__ticker.upper()+suffix)
         fig.add_trace(go.Scatter(x=df.date, y=df.ma10,name="Ma10", line = dict(width=1)))
@@ -59,6 +61,10 @@ class Stock():
             layout = go.Layout(title=go.layout.Title(text=self.__ticker.upper()+suffix))
         )
 
+        fig.add_trace(go.Scatter(x=df.date, y=df.ma10,name="Ma10", line = dict(width=1)))
+        fig.add_trace(go.Scatter(x=df.date, y=df.ma20,name="Ma20", line = dict(width=1)))
+        fig.add_trace(go.Scatter(x=df.date, y=df.ma60,name="Ma60", line = dict(width=1)))
+
         fig.show()
 
     def Ohlc(self):
@@ -75,11 +81,26 @@ class Stock():
             layout = go.Layout(title=go.layout.Title(text=self.__ticker.upper()+suffix))
         )
 
+        fig.add_trace(go.Scatter(x=df.date, y=df.ma10,name="Ma10", line = dict(width=1)))
+        fig.add_trace(go.Scatter(x=df.date, y=df.ma20,name="Ma20", line = dict(width=1)))
+        fig.add_trace(go.Scatter(x=df.date, y=df.ma60,name="Ma60", line = dict(width=1)))
+
         fig.show()
 
     def history_price_area(self):
         df = self.__history_price
         suffix = ' Price Area'
         fig = px.area(x=df.date, y=df.adjclose, title=self.__ticker.upper()+suffix)
+
+        fig.update_xaxes(
+            rangeslider_visible=True,   
+            rangeselector=dict(
+                buttons=list([
+                    dict(count=6, label="6m", step="month", stepmode="backward"),
+                    dict(count=1, label="1y", step="year", stepmode="backward"),
+                    dict(step="all")
+                ])
+            )
+        )
 
         fig.show()
