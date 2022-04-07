@@ -1,10 +1,12 @@
 from enum import Flag
 from turtle import title
 from datetime import datetime
+import stockplotly.basic as bc
 import yahoo_fin.stock_info as si
 import plotly.express as px
 import plotly.graph_objects as go
 import plotly.subplots as ms
+import pandas as pd
 
 
 class Stock():
@@ -166,6 +168,8 @@ class Market():
         date = datetime.now().strftime('%Y/%m/%d %H:%M:%S')
         suffix = ' Day gainer'
 
+        df['Market Cap'] = bc.To_float(df['Market Cap'])
+
         fig = px.treemap(
             df, path=[px.Constant("Market Cap"),'Symbol', '% Change'], values='Market Cap',
             color='Market Cap', color_continuous_scale='Portland',
@@ -179,6 +183,8 @@ class Market():
         date = datetime.now().strftime('%Y/%m/%d %H:%M:%S')
         suffix = ' Day losers'
 
+        df['Market Cap'] = bc.To_float(df['Market Cap'])
+
         fig = px.treemap(
             df, path=[px.Constant("Market Cap"),'Symbol', '% Change'], values='Market Cap',
             color='Market Cap', color_continuous_scale='RdBu',
@@ -186,3 +192,18 @@ class Market():
         
         fig.show()
         #fig.write_image("img/2022-0407/treemap_marketcap.png")
+
+    def Treemap_day_most_active(self):
+        df = self.__day_most_active
+        date = datetime.now().strftime('%Y/%m/%d %H:%M:%S')
+        suffix = ' Day most active'
+
+        df['Market Cap'] = bc.To_float(df['Market Cap'])
+
+        fig = px.treemap(
+            df, path=['Symbol', '% Change'], values='Market Cap',
+            color='Market Cap', color_continuous_scale='RdBu',
+            title=date+suffix)
+        
+        fig.show()
+        # fig.write_image("img/2022-0407/Treemap_day_most_active.png")
