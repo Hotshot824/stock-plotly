@@ -14,7 +14,8 @@ def main():
     # stock.Ohlc()
 
     market = spsi.Market()
-    market.Treemap_marketcap()
+    market.Treemap_day_gainer()
+    market.Treemap_day_losers()
 
 if __name__ == "__main__":
     main()
