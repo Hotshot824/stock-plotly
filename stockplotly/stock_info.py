@@ -16,6 +16,9 @@ class Stock():
         self.__start_date = start_date
         self.__end_date = end_date
 
+        self.__stats = si.get_stats(ticker)
+        self.__stats_valuation = si.get_stats_valuation(ticker)
+
         self.__history_price = si.get_data(
             ticker, 
             start_date=self.__start_date, 
