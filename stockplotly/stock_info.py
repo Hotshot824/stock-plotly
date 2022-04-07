@@ -159,13 +159,15 @@ class Market():
     def __init__(self):
         self.__day_gainers = si.get_day_gainers()
 
-    def Treemap_volume(self):
+    def Treemap_marketcap(self):
         df = self.__day_gainers
         date = datetime.now().strftime('%Y/%m/%d %H:%M:%S')
-        suffix = ' Volume'
+        suffix = ' Heatmap'
 
         fig = px.treemap(
-            df, path=[px.Constant("Symbol"),'Symbol'], values='Change',
-            color='Change', color_continuous_scale='Portland',
+            df, path=[px.Constant("Heatmap"),'Symbol', '% Change'], values='Market Cap',
+            color='Market Cap', color_continuous_scale='Portland',
             title=date+suffix)
+        
         fig.show()
+        #fig.write_image("img/2022-0407/treemap_marketcap.png")

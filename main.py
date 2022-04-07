@@ -14,7 +14,7 @@ def main():
     # stock.Ohlc()
 
     market = spsi.Market()
-    market.Treemap_volume()
+    market.Treemap_marketcap()
 
 if __name__ == "__main__":
     main()
