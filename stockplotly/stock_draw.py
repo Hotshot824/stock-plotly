@@ -3,14 +3,14 @@
 from enum import Flag
 from turtle import title
 from datetime import datetime
-import stockplotly.basic as bc
+from stockplotly.basic import basic
 import yahoo_fin.stock_info as si
 import plotly.express as px
 import plotly.graph_objects as go
 import plotly.subplots as ms
 import pandas as pd
 
-class Stock(bc.basic):
+class Stock(basic):
 
     def __init__(self, ticker, start_date, end_date, io_image = True):
         self.__ticker = ticker
@@ -41,12 +41,14 @@ class Stock(bc.basic):
         self.__history_price["ma20"] = self.__history_price["adjclose"].rolling(20).mean()
         self.__history_price["ma60"] = self.__history_price["adjclose"].rolling(60).mean()
 
+        self.__history_price["Daily"] = super()._basic__DTD(self.__history_price["adjclose"])
+
     def history_price(self):
         df = self.__history_price
-        suffix = ' History Price'
+        suffix = " History Price"
         title = self.__ticker.upper()+suffix
 
-        fig = px.line(df, x="date", y='adjclose', title=title)
+        fig = px.line(df, x="date", y="adjclose", title=title)
         fig.add_trace(go.Scatter(x=df.date, y=df.ma10,name="Ma10", line = dict(width=1)))
         fig.add_trace(go.Scatter(x=df.date, y=df.ma20,name="Ma20", line = dict(width=1)))
         fig.add_trace(go.Scatter(x=df.date, y=df.ma60,name="Ma60", line = dict(width=1)))
@@ -62,13 +64,13 @@ class Stock(bc.basic):
             )
         )
 
-        super().export(fig, title, self.__io_image)
+        super()._basic__export(fig, title, self.__io_image)
 
     def history_price_area(self):
         df = self.__history_price
-        suffix = ' Price Area'
+        suffix = " History Price Area"
         title = self.__ticker.upper()+suffix
-        fig = px.area(x=df.date, y=df.adjclose, title=self.__ticker.upper()+suffix)
+        fig = px.area(df, x="date", y="adjclose", title=self.__ticker.upper()+suffix)
 
         fig.update_xaxes(
             rangeslider_visible=True,   
@@ -81,11 +83,19 @@ class Stock(bc.basic):
             )
         )
 
-        super().export(fig, title, self.__io_image)
+        super()._basic__export(fig, title, self.__io_image)
+
+    def history_price_pc(self):
+        df = self.__history_price
+        suffix = " History Price Percentage"
+        title = self.__ticker.upper()+suffix
+
+        print(df)
+
 
     def candlestick(self):
         df = self.__history_price
-        suffix = ' Candlestick'
+        suffix = " Candlestick"
         title = self.__ticker.upper()+suffix
         
         fig = ms.make_subplots(
@@ -115,22 +125,22 @@ class Stock(bc.basic):
         #Bar trace for volumes on 2nd row without legend
         fig.add_trace(
             go.Bar(
-                x=df['date'], 
-                y=df['volume'], 
+                x=df["date"], 
+                y=df["volume"], 
                 showlegend=False
             ), 
             row=2, col=1
         )
 
-        #Do not show candlestick's rangeslider plot 
+        #Do not show candlestick"s rangeslider plot 
         fig.update(layout_xaxis_rangeslider_visible=False)
         fig.update_layout(title_text=self.__ticker.upper()+suffix)
 
-        super().export(fig, title, self.__io_image)
+        super()._basic__export(fig, title, self.__io_image)
 
     def Ohlc(self):
         df = self.__history_price
-        suffix = ' Ohlc'
+        suffix = " Ohlc"
         title = self.__ticker.upper()+suffix
 
         fig = ms.make_subplots(
@@ -160,21 +170,21 @@ class Stock(bc.basic):
         #Bar trace for volumes on 2nd row without legend
         fig.add_trace(
             go.Bar(
-                x=df['date'], 
-                y=df['volume'], 
+                x=df["date"], 
+                y=df["volume"], 
                 showlegend=False
             ), 
             row=2, col=1
         )
 
-        #Do not show OHLC's rangeslider plot 
+        #Do not show OHLC"s rangeslider plot 
         fig.update(layout_xaxis_rangeslider_visible=False)
         fig.update_layout(title_text=self.__ticker.upper()+suffix)
 
-        super().export(fig, title, self.__io_image)
+        super()._basic__export(fig, title, self.__io_image)
 
 
-class Market(bc.basic):
+class Market(basic):
 
     def __init__(self, io_image = True):
         self.__day_gainers = si.get_day_gainers()
@@ -185,45 +195,45 @@ class Market(bc.basic):
 
     def day_gainer_treemap(self):
         df = self.__day_gainers
-        date = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-        suffix = ' Day gainer'
+        date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        suffix = " Day gainer"
         title = date+suffix
 
-        df['Market Cap'] = super().as_float(df['Market Cap'])
+        df["Market Cap"] = super()._basic__as_float(df["Market Cap"])
 
         fig = px.treemap(
-            df, path=[px.Constant("Market Cap"),'Symbol', '% Change'], values='Market Cap',
-            color='Market Cap', color_continuous_scale='Portland',
+            df, path=[px.Constant("Market Cap"),"Symbol", "% Change"], values="Market Cap",
+            color="Market Cap", color_continuous_scale="Portland",
             title=title)
         
-        super().export(fig, suffix[1:], self.__io_image)
+        super()._basic__export(fig, suffix[1:], self.__io_image)
 
     def day_losers_treemap(self):
         df = self.__day_losers
-        date = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-        suffix = ' Day losers'
+        date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        suffix = " Day losers"
         title = date+suffix
 
-        df['Market Cap'] = super().as_float(df['Market Cap'])
+        df["Market Cap"] = super()._basic__as_float(df["Market Cap"])
 
         fig = px.treemap(
-            df, path=[px.Constant("Market Cap"),'Symbol', '% Change'], values='Market Cap',
-            color='Market Cap', color_continuous_scale='RdBu',
+            df, path=[px.Constant("Market Cap"),"Symbol", "% Change"], values="Market Cap",
+            color="Market Cap", color_continuous_scale="RdBu",
             title=title)
         
-        super().export(fig, suffix[1:], self.__io_image)
+        super()._basic__export(fig, suffix[1:], self.__io_image)
 
     def day_most_active_treemap(self):
         df = self.__day_most_active
-        date = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-        suffix = ' Day most active'
+        date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        suffix = " Day most active"
         title = date+suffix
         
-        df['Market Cap'] = super().as_float(df['Market Cap'])
+        df["Market Cap"] = super()._basic__as_float(df["Market Cap"])
 
         fig = px.treemap(
-            df, path=[px.Constant("Market Cap"), 'Symbol', '% Change'], values='Market Cap',
-            color='Market Cap', color_continuous_scale='YlGn',
+            df, path=[px.Constant("Market Cap"), "Symbol", "% Change"], values="Market Cap",
+            color="Market Cap", color_continuous_scale="YlGn",
             title=title)
         
-        super().export(fig, suffix[1:], self.__io_image)
+        super()._basic__export(fig, suffix[1:], self.__io_image)

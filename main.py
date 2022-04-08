@@ -13,6 +13,7 @@ def main():
     stock.history_price_area()
     stock.candlestick()
     stock.Ohlc()
+    stock.history_price_pc()
 
     market = sd.Market(io_image=True)
     market.day_gainer_treemap()
