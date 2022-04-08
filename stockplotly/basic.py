@@ -4,9 +4,9 @@ def Dateadd(date):
     temp[2] = str(int(temp[2]) - 1)
     return temp[0] + '/' + temp[1] + '/' + temp[2]
 
-def To_float(s):
+def as_float(series):
     temp = []
-    for i in s:
+    for i in series:
         if type(i) != float:
             i = i.replace(".", "")
             i = float(i.replace("T", "000000000.0"))
