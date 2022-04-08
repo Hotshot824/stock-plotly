@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import stockplotly.stock_info as spsi
 import stockplotly.basic as ba
 
@@ -14,9 +16,9 @@ def main():
     stock.Ohlc()
 
     market = spsi.Market(io_status=False)
-    market.Treemap_day_gainer()
-    market.Treemap_day_losers()
-    market.Treemap_day_most_active()
+    market.day_gainer_treemap()
+    market.day_losers_treemap()
+    market.day_most_active_treemap()
 
 if __name__ == "__main__":
     main()
