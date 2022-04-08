@@ -16,20 +16,23 @@ plotly == 5.6.0
 ![](https://i.imgur.com/wy5l53p.jpg)
 
 ## history price
-![](https://i.imgur.com/y6pCUNh.png)
+![](https://github.com/Hotshot824/stock-plotly/blob/main/img/TSLA%20History%20Price.png?raw=true)
+
+## history price area
+![](https://github.com/Hotshot824/stock-plotly/blob/main/img/TSLA%20History%20Price%20Area.png?raw=true)
 
 ## candlestick
-![](https://i.imgur.com/2sOpoF2.png)
+![]https://github.com/Hotshot824/stock-plotly/blob/main/img/TSLA%20Candlestick.png?raw=true
 
 ## ohlc
-![](https://i.imgur.com/R4mqQUh.png)
+![](https://github.com/Hotshot824/stock-plotly/blob/main/img/TSLA%20Ohlc.png?raw=true)
 
 ## Treemap 
 
-- [ ] Market Cap (Intraday) 計算市值未完成
+- [x] Market Cap (Intraday) 計算市值完成
 
-![](https://github.com/Hotshot824/stock-plotly/blob/main/img/2022-0406-1936/treemap%20dataset_2.JPG?raw=true)
+![](https://github.com/Hotshot824/stock-plotly/blob/main/img/Day%20gainer.png?raw=true)
 
-![](https://github.com/Hotshot824/stock-plotly/blob/main/img/2022-0406-1936/treemap%20dataset.JPG?raw=true)
+![](https://github.com/Hotshot824/stock-plotly/blob/main/img/Day%20losers.png?raw=true)
 
-![](https://github.com/Hotshot824/stock-plotly/blob/main/img/2022-0406-1936/tmap.png?raw=true)
+![](https://github.com/Hotshot824/stock-plotly/blob/main/img/Day%20most%20active.png?raw=true)

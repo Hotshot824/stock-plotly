@@ -21,6 +21,12 @@ class Stock():
         self.__stats = si.get_stats(ticker)
         self.__stats_valuation = si.get_stats_valuation(ticker)
 
+        # self.__dji = si.get_data("^DJI",
+        #     start_date=self.__start_date, 
+        #     end_date=self.__end_date, 
+        #     index_as_date=False,
+        # )
+
         self.__history_price = si.get_data(
             ticker, 
             start_date=self.__start_date, 
@@ -28,6 +34,7 @@ class Stock():
             index_as_date=False,
         )
 
+        # Calculate MA
         self.__history_price["ma10"] = self.__history_price["adjclose"].rolling(10).mean()
         self.__history_price["ma20"] = self.__history_price["adjclose"].rolling(20).mean()
         self.__history_price["ma60"] = self.__history_price["adjclose"].rolling(60).mean()
