@@ -13,6 +13,8 @@ import pandas as pd
 class Stock(basic):
 
     def __init__(self, ticker, start_date, end_date, io_image = True):
+        super().__init__(start_date, end_date)
+
         self.__ticker = ticker
         self.__start_date = start_date
         self.__end_date = end_date
@@ -20,33 +22,42 @@ class Stock(basic):
         self.__io_image = io_image
 
         # No usage data
+        print(("Crawling " + ticker.upper() + " get_stats").ljust(50, "."), end="") 
         self.__stats = si.get_stats(ticker)
+        print("OK!".rjust(10,".")) 
+
+        print(("Crawling " + ticker.upper() + " stats_valuation").ljust(50, "."), end="") 
         self.__stats_valuation = si.get_stats_valuation(ticker)
+        print("OK!".rjust(10,".")) 
+
+        print(("Crawling " + ticker.upper() + " quote_table").ljust(50, "."), end="") 
         self.__quote_table = si.get_quote_table(ticker, dict_result = False)
+        print("OK!".rjust(10,".")) 
+
+        print(("Crawling " + ticker.upper() + " history_price").ljust(50, "."), end="") 
         self.__history_price = si.get_data(
             ticker, 
             start_date=self.__start_date, 
             end_date=self.__end_date, 
             index_as_date=False,
         )
-
-        # self.__dji = si.get_data("^DJI",
-        #     start_date=self.__start_date, 
-        #     end_date=self.__end_date, 
-        #     index_as_date=False,
-        # )
+        print("OK!".rjust(10,".")) 
 
         # Calculate data
+        print(("Calculating "+ticker.upper()+" other data").ljust(50, "."), end="") 
         self.__history_price["ma10"] = self.__history_price["adjclose"].rolling(10).mean()
         self.__history_price["ma20"] = self.__history_price["adjclose"].rolling(20).mean()
         self.__history_price["ma60"] = self.__history_price["adjclose"].rolling(60).mean()
 
-        self.__history_price["Daily"] = super()._basic__DTD(self.__history_price["adjclose"])
+        self.__history_price["Daily Change %"] = super()._basic__DTD(self.__history_price["adjclose"])
+        print("OK!".rjust(10,".")) 
 
+    # methods
     def history_price(self):
         df = self.__history_price
         suffix = " History Price"
         title = self.__ticker.upper()+suffix
+        super()._basic__drawstart(title)
 
         fig = px.line(df, x="date", y="adjclose", title=title)
         fig.add_trace(go.Scatter(x=df.date, y=df.ma10,name="Ma10", line = dict(width=1)))
@@ -70,6 +81,8 @@ class Stock(basic):
         df = self.__history_price
         suffix = " History Price Area"
         title = self.__ticker.upper()+suffix
+        super()._basic__drawstart(title)
+
         fig = px.area(df, x="date", y="adjclose", title=self.__ticker.upper()+suffix)
 
         fig.update_xaxes(
@@ -85,18 +98,39 @@ class Stock(basic):
 
         super()._basic__export(fig, title, self.__io_image)
 
-    def history_price_pc(self):
+    def history_price_ROI(self):
         df = self.__history_price
-        suffix = " History Price Percentage"
+        suffix = " Return on Investment"
         title = self.__ticker.upper()+suffix
 
-        print(df)
+        dji = self._basic__DJI
+        sp500 = self._basic__GSPC
+        nasdaq = self._basic__IXIC
+
+        dji["Daily Change %"] = super()._basic__DTD(dji["adjclose"])
+        sp500["Daily Change %"] = super()._basic__DTD(sp500["adjclose"])
+        nasdaq["Daily Change %"] = super()._basic__DTD(nasdaq["adjclose"])
+
+        super()._basic__drawstart(title)
+
+        fig = px.line(df, x="date", y="Daily Change %", title=self.__ticker.upper()+suffix)
+        fig.update_traces(line_color='red', line_width=2)
+
+        fig.add_trace(go.Scatter(x=dji["date"], y=dji["Daily Change %"],name="DJI", 
+            line = dict(width=2, color='royalblue')))
+        fig.add_trace(go.Scatter(x=sp500["date"], y=sp500["Daily Change %"],name="S&P500", 
+            line = dict(width=2, color='green')))
+        fig.add_trace(go.Scatter(x=nasdaq["date"], y=nasdaq["Daily Change %"],name="NASDAQ", 
+            line = dict(width=2, color='yellow')))
+
+        super()._basic__export(fig, title, self.__io_image)
 
 
     def candlestick(self):
         df = self.__history_price
         suffix = " Candlestick"
         title = self.__ticker.upper()+suffix
+        super()._basic__drawstart(title)
         
         fig = ms.make_subplots(
             rows=2, cols=1, 
@@ -142,6 +176,7 @@ class Stock(basic):
         df = self.__history_price
         suffix = " Ohlc"
         title = self.__ticker.upper()+suffix
+        super()._basic__drawstart(title)
 
         fig = ms.make_subplots(
             rows=2, cols=1, 
@@ -183,6 +218,16 @@ class Stock(basic):
 
         super()._basic__export(fig, title, self.__io_image)
 
+    def percentage_increase(self):
+        df = self.__history_price
+        df['Percentage'] = (df['close']/df['close'].shift(1)) -1
+        suffix = " Percentage Increase"
+        title = self.__ticker.upper()+suffix
+        super()._basic__drawstart(title)
+
+        fig = px.histogram(df, x="Percentage", title=self.__ticker.upper()+suffix)
+
+        super()._basic__export(fig, title, self.__io_image)
 
 class Market(basic):
 
@@ -198,6 +243,7 @@ class Market(basic):
         date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         suffix = " Day gainer"
         title = date+suffix
+        super()._basic__drawstart(title)
 
         df["Market Cap"] = super()._basic__as_float(df["Market Cap"])
 
@@ -213,6 +259,7 @@ class Market(basic):
         date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         suffix = " Day losers"
         title = date+suffix
+        super()._basic__drawstart(title)
 
         df["Market Cap"] = super()._basic__as_float(df["Market Cap"])
 
@@ -228,6 +275,7 @@ class Market(basic):
         date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         suffix = " Day most active"
         title = date+suffix
+        super()._basic__drawstart(title)
         
         df["Market Cap"] = super()._basic__as_float(df["Market Cap"])
 

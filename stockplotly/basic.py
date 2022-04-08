@@ -1,15 +1,50 @@
 # -*- coding: utf-8 -*-
+import yahoo_fin.stock_info as si
 
 class basic():
     
-    def __init__(self):
-        pass
+    def __init__(self, start_date, end_date):
+        # DJI index
+
+        print("Crawling Dow Jones Index Data".ljust(50, "."), end="") 
+        self.__DJI = si.get_data(
+            "^DJI", 
+            start_date=start_date, 
+            end_date=end_date, 
+            index_as_date=False,
+        )
+        print("OK!".rjust(10,".")) 
+
+        # S&P500 index
+        print("Crawling S&P500 Index Data".ljust(50, "."), end="") 
+        self.__GSPC = si.get_data(
+            "^GSPC", 
+            start_date=start_date, 
+            end_date=end_date, 
+            index_as_date=False,
+        )
+        print("OK!".rjust(10,".")) 
+
+        # Nasdaq index
+        print("Crawling Nasdaq Index Data".ljust(50, "."), end="") 
+        self.__IXIC = si.get_data( 
+            "^IXIC", 
+            start_date=start_date, 
+            end_date=end_date, 
+            index_as_date=False,
+        )
+        print("OK!".rjust(10,".")) 
+
+    # methods
+    def __drawstart(self, title):
+        print(("Draw " + title).ljust(50, "."), end="") 
 
     def __export(self, fig, title, io_image):
         if io_image == True:
             fig.write_image("img/" + title + '.jpg', width=1980, height=1080)
         else:
             fig.show()
+        print("OK!".rjust(10,".")) 
 
     def __as_float(self, series):
         temp = []
