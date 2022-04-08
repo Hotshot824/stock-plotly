@@ -12,12 +12,12 @@ import pandas as pd
 
 class Stock(bc.basic):
 
-    def __init__(self, ticker, start_date, end_date, io_status = True):
+    def __init__(self, ticker, start_date, end_date, io_image = True):
         self.__ticker = ticker
         self.__start_date = start_date
         self.__end_date = end_date
 
-        self.__io_status = io_status
+        self.__io_image = io_image
 
         # No usage data
         self.__stats = si.get_stats(ticker)
@@ -62,7 +62,7 @@ class Stock(bc.basic):
             )
         )
 
-        super().export(fig, title, self.__io_status)
+        super().export(fig, title, self.__io_image)
 
     def history_price_area(self):
         df = self.__history_price
@@ -81,13 +81,13 @@ class Stock(bc.basic):
             )
         )
 
-        super().export(fig, title, self.__io_status)
+        super().export(fig, title, self.__io_image)
 
     def candlestick(self):
         df = self.__history_price
         suffix = ' Candlestick'
         title = self.__ticker.upper()+suffix
-
+        
         fig = ms.make_subplots(
             rows=2, cols=1, 
             shared_xaxes=True, 
@@ -126,7 +126,7 @@ class Stock(bc.basic):
         fig.update(layout_xaxis_rangeslider_visible=False)
         fig.update_layout(title_text=self.__ticker.upper()+suffix)
 
-        super().export(fig, title, self.__io_status)
+        super().export(fig, title, self.__io_image)
 
     def Ohlc(self):
         df = self.__history_price
@@ -171,17 +171,17 @@ class Stock(bc.basic):
         fig.update(layout_xaxis_rangeslider_visible=False)
         fig.update_layout(title_text=self.__ticker.upper()+suffix)
 
-        super().export(fig, title, self.__io_status)
+        super().export(fig, title, self.__io_image)
 
 
 class Market(bc.basic):
 
-    def __init__(self, io_status = True):
+    def __init__(self, io_image = True):
         self.__day_gainers = si.get_day_gainers()
         self.__day_losers = si.get_day_losers()
         self.__day_most_active = si.get_day_most_active()
 
-        self.__io_status = io_status
+        self.__io_image = io_image
 
     def day_gainer_treemap(self):
         df = self.__day_gainers
@@ -196,7 +196,7 @@ class Market(bc.basic):
             color='Market Cap', color_continuous_scale='Portland',
             title=title)
         
-        super().export(fig, suffix[1:], self.__io_status)
+        super().export(fig, suffix[1:], self.__io_image)
 
     def day_losers_treemap(self):
         df = self.__day_losers
@@ -211,7 +211,7 @@ class Market(bc.basic):
             color='Market Cap', color_continuous_scale='RdBu',
             title=title)
         
-        super().export(fig, suffix[1:], self.__io_status)
+        super().export(fig, suffix[1:], self.__io_image)
 
     def day_most_active_treemap(self):
         df = self.__day_most_active
@@ -226,4 +226,4 @@ class Market(bc.basic):
             color='Market Cap', color_continuous_scale='YlGn',
             title=title)
         
-        super().export(fig, suffix[1:], self.__io_status)
+        super().export(fig, suffix[1:], self.__io_image)

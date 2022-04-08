@@ -5,11 +5,11 @@ class basic():
     def __init__(self):
         pass
 
-    def export(self, fig, title, status):
-        if status == True:
-            fig.show()
+    def export(self, fig, title, io_image):
+        if io_image == True:
+            fig.write_image("img/" + title + '.jpg', width=1980, height=1080)
         else:
-            fig.write_image("img/" + title + '.png', width=1980, height=1080)
+            fig.show()
 
     def as_float(self, series):
         temp = []
