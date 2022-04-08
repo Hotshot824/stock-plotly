@@ -19,10 +19,10 @@ plotly == 5.6.0
 ![](https://github.com/Hotshot824/stock-plotly/blob/main/img/TSLA%20History%20Price.png?raw=true)
 
 ## history price area
-![](https://github.com/Hotshot824/stock-plotly/blob/main/img/TSLA%20History%20Price%20Area.png?raw=true)
+![](https://github.com/Hotshot824/stock-plotly/blob/main/img/TSLA%20Price%20Area.png?raw=true)
 
 ## candlestick
-![]https://github.com/Hotshot824/stock-plotly/blob/main/img/TSLA%20Candlestick.png?raw=true
+![](https://github.com/Hotshot824/stock-plotly/blob/main/img/TSLA%20Candlestick.png?raw=true)
 
 ## ohlc
 ![](https://github.com/Hotshot824/stock-plotly/blob/main/img/TSLA%20Ohlc.png?raw=true)
