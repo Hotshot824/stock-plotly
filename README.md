@@ -6,9 +6,14 @@ This API based on yahoo_fin and plotly, able to do simple stock analysis diagram
 
 ## Requires python package
 ```
-yahoo_fin == 0.8.9.1
+pip install yahoo_fin == 0.8.9.1
 
-plotly == 5.6.0
+pip install plotly == 5.6.0
+
+pip install -U kaleido==0.2.1
+
+# ts is a technical analysis library
+pip install ta == 0.9.0
 ```
 
 # Stock Module

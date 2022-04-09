@@ -6,7 +6,7 @@ import time
 def main():
     #stock parameter
     ticker = 'tsla'
-    startdate = '01/01/2021'
+    startdate = '01/01/2020'
     enddate = '09/04/2022'
     io = True
 

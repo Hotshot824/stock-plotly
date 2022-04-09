@@ -9,6 +9,7 @@ import plotly.express as px
 import plotly.graph_objects as go
 import plotly.subplots as ms
 import pandas as pd
+from ta.trend import MACD 
 
 class Stock(basic):
 
@@ -45,9 +46,9 @@ class Stock(basic):
 
         # Calculate data
         print(("Calculating "+ticker.upper()+" other data").ljust(50, "."), end="") 
-        self.__history_price["ma10"] = self.__history_price["adjclose"].rolling(10).mean()
-        self.__history_price["ma20"] = self.__history_price["adjclose"].rolling(20).mean()
-        self.__history_price["ma60"] = self.__history_price["adjclose"].rolling(60).mean()
+        self.__history_price["ma10"] = self.__history_price["adjclose"].rolling(window=10).mean()
+        self.__history_price["ma20"] = self.__history_price["adjclose"].rolling(window=20).mean()
+        self.__history_price["ma60"] = self.__history_price["adjclose"].rolling(window=60).mean()
 
         self.__history_price["Daily Change %"] = super()._basic__DTD(self.__history_price["adjclose"])
         print("OK!".rjust(10,".")) 
@@ -98,6 +99,16 @@ class Stock(basic):
 
         super()._basic__export(fig, title, self.__io_image)
 
+    def __macd(self, df, fig):
+
+        macd = MACD(close=df['close'], window_slow=26, window_fast=12, window_sign=9)
+
+        fig.add_trace(go.Bar(x=df.index, y=macd.macd_diff(), name="MACD histogram"), row=3, col=1)
+        fig.add_trace(go.Scatter(x=df.index, y=macd.macd(), line=dict(color='red', width=1), name="DIF"), row=3, col=1)
+        fig.add_trace(go.Scatter(x=df.index, y=macd.macd_signal(), line=dict(color='blue', width=1), name="MACD"), row=3, col=1)
+
+        return fig
+
     def candlestick(self):
         df = self.__history_price
         suffix = " Candlestick"
@@ -105,10 +116,10 @@ class Stock(basic):
         super()._basic__drawstart(title)
         
         fig = ms.make_subplots(
-            rows=2, cols=1, 
+            rows=3, cols=1, 
             shared_xaxes=True, 
             vertical_spacing=0.03, 
-            row_width=[0.2, 0.8],
+            row_width=[0.15, 0.15, 0.7],
         )
 
         #Plot candlestick on 1st row
@@ -138,6 +149,8 @@ class Stock(basic):
             row=2, col=1
         )
 
+        fig = self.__macd(df, fig)
+
         #Do not show candlestick"s rangeslider plot 
         fig.update(layout_xaxis_rangeslider_visible=False)
         fig.update_layout(title_text=self.__ticker.upper()+suffix)
@@ -151,10 +164,10 @@ class Stock(basic):
         super()._basic__drawstart(title)
 
         fig = ms.make_subplots(
-            rows=2, cols=1, 
+            rows=3, cols=1, 
             shared_xaxes=True, 
             vertical_spacing=0.03, 
-            row_width=[0.2, 0.8],
+            row_width=[0.15, 0.15, 0.7],
         )
 
         #Plot Ohlc on 1st row
@@ -183,6 +196,8 @@ class Stock(basic):
             ), 
             row=2, col=1
         )
+
+        fig = self.__macd(df, fig)
 
         #Do not show OHLC"s rangeslider plot 
         fig.update(layout_xaxis_rangeslider_visible=False)
@@ -229,7 +244,9 @@ class Stock(basic):
         title = self.__ticker.upper()+suffix
         super()._basic__drawstart(title)
 
-        fig = px.histogram(df, x="Daily %", marginal="box", title=self.__ticker.upper()+suffix, nbins=80)
+        fig = px.histogram(df, x="Daily %", marginal="box", histnorm='percent', nbins=80, title=self.__ticker.upper()+suffix)
+
+        fig.add_vline(x=df['Daily %'].mean(), line_width=1, line_dash="dashdot", line_color="red")
 
         super()._basic__export(fig, title, self.__io_image)
 
