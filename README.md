@@ -33,13 +33,13 @@ plotly == 5.6.0
 
 - [x] Return on Investment 投資報酬率計算完成
 
-![](https://github.com/Hotshot824/stock-plotly/blob/main/img/TSLA%20Return%20on%20Investment.jpg?raw=true)
+![](https://github.com/Hotshot824/stock-plotly/blob/main/img/TSLA%20Compare%20index.jpg?raw=true)
 
 ## percentage_increase
 
 - [ ] Return Rate 機率分布未完成
 
-![](https://github.com/Hotshot824/stock-plotly/blob/main/img/TSLA%20Percentage%20Increase.jpg?raw=true)
+![](https://github.com/Hotshot824/stock-plotly/blob/main/img/TSLA%20Daily%20Returns.jpg?raw=true)
 
 # Market Module
 

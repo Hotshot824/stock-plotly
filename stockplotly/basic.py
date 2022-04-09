@@ -15,16 +15,6 @@ class basic():
         )
         print("OK!".rjust(10,".")) 
 
-        # S&P500 index
-        print("Crawling S&P500 Index Data".ljust(50, "."), end="") 
-        self.__GSPC = si.get_data(
-            "^GSPC", 
-            start_date=start_date, 
-            end_date=end_date, 
-            index_as_date=False,
-        )
-        print("OK!".rjust(10,".")) 
-
         # Nasdaq index
         print("Crawling Nasdaq Index Data".ljust(50, "."), end="") 
         self.__IXIC = si.get_data( 
@@ -35,9 +25,29 @@ class basic():
         )
         print("OK!".rjust(10,".")) 
 
+        # S&P500 index
+        print("Crawling S&P500 Index Data".ljust(50, "."), end="") 
+        self.__GSPC = si.get_data(
+            "^GSPC", 
+            start_date=start_date, 
+            end_date=end_date, 
+            index_as_date=False,
+        )
+        print("OK!".rjust(10,".")) 
+
+        # Russell 2000 index
+        print("Crawling Russell 2000 Index Data".ljust(50, "."), end="") 
+        self.__RUT = si.get_data(
+            "^RUT", 
+            start_date=start_date, 
+            end_date=end_date, 
+            index_as_date=False,
+        )
+        print("OK!".rjust(10,".")) 
+
     # methods
     def __drawstart(self, title):
-        print(("Draw " + title).ljust(50, "."), end="") 
+        print(("Drawing " + title).ljust(50, "."), end="") 
 
     def __export(self, fig, title, io_image):
         if io_image == True:

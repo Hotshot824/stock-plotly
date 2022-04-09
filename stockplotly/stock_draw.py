@@ -98,34 +98,6 @@ class Stock(basic):
 
         super()._basic__export(fig, title, self.__io_image)
 
-    def history_price_ROI(self):
-        df = self.__history_price
-        suffix = " Return on Investment"
-        title = self.__ticker.upper()+suffix
-
-        dji = self._basic__DJI
-        sp500 = self._basic__GSPC
-        nasdaq = self._basic__IXIC
-
-        dji["Daily Change %"] = super()._basic__DTD(dji["adjclose"])
-        sp500["Daily Change %"] = super()._basic__DTD(sp500["adjclose"])
-        nasdaq["Daily Change %"] = super()._basic__DTD(nasdaq["adjclose"])
-
-        super()._basic__drawstart(title)
-
-        fig = px.line(df, x="date", y="Daily Change %", title=self.__ticker.upper()+suffix)
-        fig.update_traces(line_color='red', line_width=2)
-
-        fig.add_trace(go.Scatter(x=dji["date"], y=dji["Daily Change %"],name="DJI", 
-            line = dict(width=2, color='royalblue')))
-        fig.add_trace(go.Scatter(x=sp500["date"], y=sp500["Daily Change %"],name="S&P500", 
-            line = dict(width=2, color='green')))
-        fig.add_trace(go.Scatter(x=nasdaq["date"], y=nasdaq["Daily Change %"],name="NASDAQ", 
-            line = dict(width=2, color='yellow')))
-
-        super()._basic__export(fig, title, self.__io_image)
-
-
     def candlestick(self):
         df = self.__history_price
         suffix = " Candlestick"
@@ -172,7 +144,7 @@ class Stock(basic):
 
         super()._basic__export(fig, title, self.__io_image)
 
-    def Ohlc(self):
+    def ohlc(self):
         df = self.__history_price
         suffix = " Ohlc"
         title = self.__ticker.upper()+suffix
@@ -218,14 +190,46 @@ class Stock(basic):
 
         super()._basic__export(fig, title, self.__io_image)
 
-    def percentage_increase(self):
+    def compare_index(self):
         df = self.__history_price
-        df['Percentage'] = (df['close']/df['close'].shift(1)) -1
-        suffix = " Percentage Increase"
+        suffix = " Compare index"
+        title = self.__ticker.upper()+suffix
+
+        dji = self._basic__DJI
+        sp500 = self._basic__GSPC
+        nasdaq = self._basic__IXIC
+        ru2000 = self._basic__RUT
+
+        dji["Daily Change %"] = super()._basic__DTD(dji["adjclose"])
+        sp500["Daily Change %"] = super()._basic__DTD(sp500["adjclose"])
+        nasdaq["Daily Change %"] = super()._basic__DTD(nasdaq["adjclose"])
+        ru2000["Daily Change %"] = super()._basic__DTD(ru2000["adjclose"])
+
+        super()._basic__drawstart(title)
+
+        fig = px.line(title=self.__ticker.upper()+suffix)
+        fig.add_trace(go.Scatter(x=df["date"], y=df["Daily Change %"],name=self.__ticker, 
+            line = dict(width=2, color='red')))
+
+        fig.add_trace(go.Scatter(x=dji["date"], y=dji["Daily Change %"],name="DJI", 
+            line = dict(width=1, color='royalblue')))
+        fig.add_trace(go.Scatter(x=sp500["date"], y=sp500["Daily Change %"],name="S&P500", 
+            line = dict(width=1, color='green')))
+        fig.add_trace(go.Scatter(x=nasdaq["date"], y=nasdaq["Daily Change %"],name="NASDAQ", 
+            line = dict(width=1, color='yellow')))
+        fig.add_trace(go.Scatter(x=ru2000["date"], y=ru2000["Daily Change %"],name="Russell 2000", 
+            line = dict(width=1, color='orange')))
+
+        super()._basic__export(fig, title, self.__io_image)
+
+    def daily_deturns(self):
+        df = self.__history_price
+        df['Daily %'] = (df['close']/df['close'].shift(1)) -1
+        suffix = " Daily Returns"
         title = self.__ticker.upper()+suffix
         super()._basic__drawstart(title)
 
-        fig = px.histogram(df, x="Percentage", title=self.__ticker.upper()+suffix)
+        fig = px.histogram(df, x="Daily %", marginal="box", title=self.__ticker.upper()+suffix, nbins=80)
 
         super()._basic__export(fig, title, self.__io_image)
 
