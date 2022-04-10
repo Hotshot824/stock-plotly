@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 
 from enum import Flag
-from turtle import title
+from textwrap import fill
+from turtle import fillcolor, title
 from datetime import datetime
 from stockplotly.basic import basic
 import yahoo_fin.stock_info as si
@@ -23,19 +24,17 @@ class Stock(basic):
         self.__io_image = io_image
 
         # No usage data
-        print(("Crawling " + ticker.upper() + " get_stats").ljust(50, "."), end="") 
-        self.__stats = si.get_stats(ticker)
+        print(("crawling " + ticker.upper() + " company finance data").ljust(50, "."), end="") 
+        # self.__stats = si.get_stats(ticker)
+        # self.__stats_valuation = si.get_stats_valuation(ticker)
+        # self.__quote_table = si.get_quote_table(ticker, dict_result = False)
+        # self.__flow = si.get_cash_flow(ticker, yearly = False)
+        self.__analysts_info = si.get_analysts_info(ticker)
+        self.__income_statement = si.get_income_statement(ticker, yearly = True)
+        self.__income_statement_quarterly = si.get_income_statement(ticker, yearly = False)
         print("OK!".rjust(10,".")) 
 
-        print(("Crawling " + ticker.upper() + " stats_valuation").ljust(50, "."), end="") 
-        self.__stats_valuation = si.get_stats_valuation(ticker)
-        print("OK!".rjust(10,".")) 
-
-        print(("Crawling " + ticker.upper() + " quote_table").ljust(50, "."), end="") 
-        self.__quote_table = si.get_quote_table(ticker, dict_result = False)
-        print("OK!".rjust(10,".")) 
-
-        print(("Crawling " + ticker.upper() + " history_price").ljust(50, "."), end="") 
+        print(("crawling " + ticker.upper() + " history_price").ljust(50, "."), end="") 
         self.__history_price = si.get_data(
             ticker, 
             start_date=self.__start_date, 
@@ -45,7 +44,7 @@ class Stock(basic):
         print("OK!".rjust(10,".")) 
 
         # Calculate data
-        print(("Calculating "+ticker.upper()+" other data").ljust(50, "."), end="") 
+        print(("calculating "+ticker.upper()+" other data").ljust(50, "."), end="") 
         self.__history_price["ma10"] = self.__history_price["adjclose"].rolling(window=10).mean()
         self.__history_price["ma20"] = self.__history_price["adjclose"].rolling(window=20).mean()
         self.__history_price["ma60"] = self.__history_price["adjclose"].rolling(window=60).mean()
@@ -54,6 +53,19 @@ class Stock(basic):
         print("OK!".rjust(10,".")) 
 
     # methods
+    def __macd(self, df, fig):
+
+        macd = MACD(close=df['close'], window_slow=26, window_fast=12, window_sign=9)
+
+        colors = ['green' if val >= 0 
+                else 'red' for val in macd.macd_diff()]
+
+        fig.add_trace(go.Bar(x=df.index, y=macd.macd_diff(), name="MACD histogram", marker_color=colors), row=3, col=1)
+        fig.add_trace(go.Scatter(x=df.index, y=macd.macd(), line=dict(color='red', width=1), name="DIF"), row=3, col=1)
+        fig.add_trace(go.Scatter(x=df.index, y=macd.macd_signal(), line=dict(color='blue', width=1), name="MACD"), row=3, col=1)
+
+        return fig
+
     def history_price(self):
         df = self.__history_price
         suffix = " History Price"
@@ -78,13 +90,26 @@ class Stock(basic):
 
         super()._basic__export(fig, title, self.__io_image)
 
-    def history_price_area(self):
+    def compare_area(self, o_ticker):
         df = self.__history_price
-        suffix = " History Price Area"
-        title = self.__ticker.upper()+suffix
+        suffix = " Compare"
+        title = self.__ticker.upper() + suffix + " " + o_ticker.upper() + " Area"
         super()._basic__drawstart(title)
 
-        fig = px.area(df, x="date", y="adjclose", title=self.__ticker.upper()+suffix)
+        o_df = si.get_data(
+            o_ticker, 
+            start_date=self.__start_date, 
+            end_date=self.__end_date, 
+            index_as_date=False,
+        )
+
+        fig = px.area(title=self.__ticker.upper()+suffix)
+
+        fig.add_trace(go.Scatter(x=df.date, y=df.adjclose, name=self.__ticker.upper(), 
+        line = dict(width=1), fill='tozeroy', fillcolor="rgba(255,193,102,0.3)"))
+
+        fig.add_trace(go.Scatter(x=o_df.date, y=o_df.adjclose, name=o_ticker.upper(), 
+        line = dict(width=1), fill='tozeroy', fillcolor="rgba(168,216,185,0.3)"))
 
         fig.update_xaxes(
             rangeslider_visible=True,   
@@ -98,16 +123,6 @@ class Stock(basic):
         )
 
         super()._basic__export(fig, title, self.__io_image)
-
-    def __macd(self, df, fig):
-
-        macd = MACD(close=df['close'], window_slow=26, window_fast=12, window_sign=9)
-
-        fig.add_trace(go.Bar(x=df.index, y=macd.macd_diff(), name="MACD histogram"), row=3, col=1)
-        fig.add_trace(go.Scatter(x=df.index, y=macd.macd(), line=dict(color='red', width=1), name="DIF"), row=3, col=1)
-        fig.add_trace(go.Scatter(x=df.index, y=macd.macd_signal(), line=dict(color='blue', width=1), name="MACD"), row=3, col=1)
-
-        return fig
 
     def candlestick(self):
         df = self.__history_price
@@ -208,7 +223,7 @@ class Stock(basic):
     def compare_index(self):
         df = self.__history_price
         suffix = " Compare index"
-        title = self.__ticker.upper()+suffix
+        title = self.__ticker.upper() + suffix
 
         dji = self._basic__DJI
         sp500 = self._basic__GSPC
@@ -239,16 +254,64 @@ class Stock(basic):
 
     def daily_deturns(self):
         df = self.__history_price
-        df['Daily %'] = (df['close']/df['close'].shift(1)) -1
+        df['Daily Return %'] = (df['close']/df['close'].shift(1)) -1
         suffix = " Daily Returns"
         title = self.__ticker.upper()+suffix
         super()._basic__drawstart(title)
 
-        fig = px.histogram(df, x="Daily %", marginal="box", histnorm='percent', nbins=80, title=self.__ticker.upper()+suffix)
+        fig = px.histogram(df, x="Daily Return %", marginal="box", histnorm='percent', nbins=80, title=self.__ticker.upper()+suffix)
 
-        fig.add_vline(x=df['Daily %'].mean(), line_width=1, line_dash="dashdot", line_color="red")
+        fig.add_vline(x=df['Daily Return %'].mean(), line_width=1, line_dash="dashdot", line_color="red")
 
         super()._basic__export(fig, title, self.__io_image)
+
+    def daily_deturns_volume(self):
+        df = self.__history_price
+        df['Daily Return %'] = (df['close']/df['close'].shift(1)) -1
+        suffix = " Daily Returns volume"
+        title = self.__ticker.upper()+suffix
+        super()._basic__drawstart(title)
+
+        fig = px.scatter(x=df["Daily Return %"], y=df["volume"], color=df["volume"], trendline="ols", title=self.__ticker.upper()+suffix)
+
+        super()._basic__export(fig, title, self.__io_image)
+
+    def show(self):
+        # print(self.__stats)
+        # print(self.__stats_valuation)
+        # print(self.__quote_table)
+        ins = self.__income_statement.T
+        ins_q = self.__income_statement_quarterly.T
+
+        ai_ee = self.__analysts_info["Earnings Estimate"]
+        ai_ee = ai_ee.set_index('Earnings Estimate')
+        ai_ee = ai_ee.T
+
+        print(ai_ee.index)
+        print(list(ai_ee))
+
+        fig = ms.make_subplots(
+            rows=1, cols=3, 
+            shared_xaxes=True, 
+            vertical_spacing=0.03, 
+            subplot_titles=("totalRevenue Year","totalRevenue Quarterly",)
+        )
+
+        fig.add_trace(go.Bar(x=ins.index, y=ins.totalRevenue, name="TR Year", 
+            marker=dict(color='skyblue')), row=1, col=1)
+        fig.add_trace(go.Bar(x=ins.index, y=ins.costOfRevenue, name="CR Year", 
+            marker=dict(color='indianred')), row=1, col=1)
+
+        fig.add_trace(go.Bar(x=ins_q.index, y=ins_q.totalRevenue, name="TR Quarterly", 
+            marker=dict(color='skyblue')), row=1, col=2)
+        fig.add_trace(go.Bar(x=ins_q.index, y=ins_q.costOfRevenue, name="CR Quarterly", 
+            marker=dict(color='indianred')), row=1, col=2)
+
+        # fig.add_trace(go.Bar(x=ai_ee["Earnings Estimate"], y=ai_ee["Avg. Estimate"], name="TR Quarterly", row=1, col=3))
+        # fig.add_trace(go.Bar(x=ai_ee["Earnings Estimate"], y=ai_ee["Low Estimate"], name="CR Quarterly", row=1, col=3))
+        # fig.add_trace(go.Bar(x=ai_ee["Earnings Estimate"], y=ai_ee["High Estimate"], name="CR Quarterly", row=1, col=3))
+
+        # fig.show()
 
 class Market(basic):
 

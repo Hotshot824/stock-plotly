@@ -6,7 +6,7 @@ class basic():
     def __init__(self, start_date, end_date):
         # DJI index
 
-        print("Crawling Dow Jones Index Data".ljust(50, "."), end="") 
+        print("crawling Dow Jones index data".ljust(50, "."), end="") 
         self.__DJI = si.get_data(
             "^DJI", 
             start_date=start_date, 
@@ -16,7 +16,7 @@ class basic():
         print("OK!".rjust(10,".")) 
 
         # Nasdaq index
-        print("Crawling Nasdaq Index Data".ljust(50, "."), end="") 
+        print("crawling Nasdaq index data".ljust(50, "."), end="") 
         self.__IXIC = si.get_data( 
             "^IXIC", 
             start_date=start_date, 
@@ -26,7 +26,7 @@ class basic():
         print("OK!".rjust(10,".")) 
 
         # S&P500 index
-        print("Crawling S&P500 Index Data".ljust(50, "."), end="") 
+        print("crawling S&P500 index data".ljust(50, "."), end="") 
         self.__GSPC = si.get_data(
             "^GSPC", 
             start_date=start_date, 
@@ -36,7 +36,7 @@ class basic():
         print("OK!".rjust(10,".")) 
 
         # Russell 2000 index
-        print("Crawling Russell 2000 Index Data".ljust(50, "."), end="") 
+        print("crawling Russell 2000 index data".ljust(50, "."), end="") 
         self.__RUT = si.get_data(
             "^RUT", 
             start_date=start_date, 
