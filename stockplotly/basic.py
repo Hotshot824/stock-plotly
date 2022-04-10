@@ -47,7 +47,7 @@ class basic():
 
     # methods
     def __drawstart(self, title):
-        print(("Drawing " + title).ljust(50, "."), end="") 
+        print(("drawing " + title).ljust(50, "."), end="") 
 
     def __export(self, fig, title, io_image):
         if io_image == True:

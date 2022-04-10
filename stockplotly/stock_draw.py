@@ -4,6 +4,7 @@ from enum import Flag
 from textwrap import fill
 from turtle import fillcolor, title
 from datetime import datetime
+from unicodedata import name
 from stockplotly.basic import basic
 import yahoo_fin.stock_info as si
 import plotly.express as px
@@ -28,8 +29,9 @@ class Stock(basic):
         # self.__stats = si.get_stats(ticker)
         # self.__stats_valuation = si.get_stats_valuation(ticker)
         # self.__quote_table = si.get_quote_table(ticker, dict_result = False)
-        # self.__flow = si.get_cash_flow(ticker, yearly = False)
         self.__analysts_info = si.get_analysts_info(ticker)
+        self.__balance_sheet = si.get_balance_sheet(ticker, yearly = True)
+        self.__balance_sheet_quarterly = si.get_balance_sheet(ticker, yearly = False)
         self.__income_statement = si.get_income_statement(ticker, yearly = True)
         self.__income_statement_quarterly = si.get_income_statement(ticker, yearly = False)
         print("OK!".rjust(10,".")) 
@@ -277,23 +279,39 @@ class Stock(basic):
         super()._basic__export(fig, title, self.__io_image)
 
     def company_info(self):
+        # Total Revenue
         ins = self.__income_statement.T
         ins_q = self.__income_statement_quarterly.T
 
-        ai_eh = self.__analysts_info["Earnings History"]
+        # Balance Sheet
+        sheet = self.__balance_sheet
+        cash = sheet.loc["cash"]
+        tcl = sheet.loc["totalCurrentLiabilities"]
 
+        sheet_q = self.__balance_sheet_quarterly
+        cash_q = sheet_q.loc["cash"]
+        tcl_q = sheet_q.loc["totalCurrentLiabilities"]
+
+        # Earnings History
+        ai_eh = self.__analysts_info["Earnings History"]
         ai_eh = ai_eh.set_index("Earnings History")
         ai_eh = ai_eh.T
 
+        # Growth Estimates
+        ai_ge = self.__analysts_info["Growth Estimates"]
+        ai_ge = ai_ge.set_index("Growth Estimates")
+
+        # Title
         suffix = " Company information"
         title = self.__ticker.upper()+suffix
         super()._basic__drawstart(title)
 
         fig = ms.make_subplots(
             rows=2, cols=3, 
-            shared_xaxes=True, 
-            vertical_spacing=0.03, 
-            subplot_titles=("totalRevenue Year","totalRevenue Quarterly", "EPS")
+            shared_xaxes=False, 
+            vertical_spacing=0.08, 
+            subplot_titles=("totalRevenue Year","totalRevenue Quarterly", "EPS", 
+                "Cash flow Year", "Cash flow Quarterly", "EPS Growth Estimates")
         )
 
         fig.add_trace(go.Bar(x=ins.index, y=ins.totalRevenue, name="TR Year", 
@@ -310,6 +328,21 @@ class Stock(basic):
             marker=dict(color='steelblue')), row=1, col=3)
         fig.add_trace(go.Bar(x=ai_eh.index, y=ai_eh["EPS Actual"], name="EPS Actual", 
             marker=dict(color='seagreen')), row=1, col=3)
+
+        fig.add_trace(go.Bar(x=list(sheet), y=cash, name="Cash Year", 
+            marker=dict(color='skyblue')), row=2, col=1)
+        fig.add_trace(go.Bar(x=list(sheet), y=tcl, name="tCL Year", 
+            marker=dict(color='indianred')), row=2, col=1)
+
+        fig.add_trace(go.Bar(x=list(sheet_q), y=cash_q, name="Cash", 
+            marker=dict(color='skyblue')), row=2, col=2)
+        fig.add_trace(go.Bar(x=list(sheet_q), y=tcl_q, name="tCL", 
+            marker=dict(color='indianred')), row=2, col=2)
+
+        fig.add_trace(go.Bar(x=ai_ge.index, y=ai_ge[self.__ticker.upper()], name="EPS Est.", 
+            marker=dict(color='steelblue')), row=2, col=3)
+
+        fig.update_layout(title_text=title)
 
         super()._basic__export(fig, title, self.__io_image)
 
