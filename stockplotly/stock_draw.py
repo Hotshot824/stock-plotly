@@ -276,25 +276,24 @@ class Stock(basic):
 
         super()._basic__export(fig, title, self.__io_image)
 
-    def show(self):
-        # print(self.__stats)
-        # print(self.__stats_valuation)
-        # print(self.__quote_table)
+    def company_info(self):
         ins = self.__income_statement.T
         ins_q = self.__income_statement_quarterly.T
 
-        ai_ee = self.__analysts_info["Earnings Estimate"]
-        ai_ee = ai_ee.set_index('Earnings Estimate')
-        ai_ee = ai_ee.T
+        ai_eh = self.__analysts_info["Earnings History"]
 
-        print(ai_ee.index)
-        print(list(ai_ee))
+        ai_eh = ai_eh.set_index("Earnings History")
+        ai_eh = ai_eh.T
+
+        suffix = " Company information"
+        title = self.__ticker.upper()+suffix
+        super()._basic__drawstart(title)
 
         fig = ms.make_subplots(
-            rows=1, cols=3, 
+            rows=2, cols=3, 
             shared_xaxes=True, 
             vertical_spacing=0.03, 
-            subplot_titles=("totalRevenue Year","totalRevenue Quarterly",)
+            subplot_titles=("totalRevenue Year","totalRevenue Quarterly", "EPS")
         )
 
         fig.add_trace(go.Bar(x=ins.index, y=ins.totalRevenue, name="TR Year", 
@@ -307,11 +306,12 @@ class Stock(basic):
         fig.add_trace(go.Bar(x=ins_q.index, y=ins_q.costOfRevenue, name="CR Quarterly", 
             marker=dict(color='indianred')), row=1, col=2)
 
-        # fig.add_trace(go.Bar(x=ai_ee["Earnings Estimate"], y=ai_ee["Avg. Estimate"], name="TR Quarterly", row=1, col=3))
-        # fig.add_trace(go.Bar(x=ai_ee["Earnings Estimate"], y=ai_ee["Low Estimate"], name="CR Quarterly", row=1, col=3))
-        # fig.add_trace(go.Bar(x=ai_ee["Earnings Estimate"], y=ai_ee["High Estimate"], name="CR Quarterly", row=1, col=3))
+        fig.add_trace(go.Bar(x=ai_eh.index, y=ai_eh["EPS Est."], name="EPS Est.", 
+            marker=dict(color='steelblue')), row=1, col=3)
+        fig.add_trace(go.Bar(x=ai_eh.index, y=ai_eh["EPS Actual"], name="EPS Actual", 
+            marker=dict(color='seagreen')), row=1, col=3)
 
-        # fig.show()
+        super()._basic__export(fig, title, self.__io_image)
 
 class Market(basic):
 

@@ -4,7 +4,7 @@ import stockplotly.stock_draw as sd
 
 def main():
     #stock parameter
-    ticker = "ccl"
+    ticker = "tsla"
     startdate = "01/01/2020"
     enddate = "09/04/2022"
     io = True
@@ -19,7 +19,7 @@ def main():
     stock.compare_index()
     stock.daily_deturns()
     stock.daily_deturns_volume()
-    # stock.show()
+    stock.company_info()
 
     market.day_gainer_treemap()
     market.day_losers_treemap()
