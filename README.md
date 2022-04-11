@@ -48,7 +48,7 @@ pip install ta == 0.9.0
     market.day_most_active_treemap()
 ```
 
-# Stock Module
+# Stock Class
 
 ## history price
 ![](https://github.com/Hotshot824/stock-plotly/blob/main/img/TSLA%20History%20Price.jpg?raw=true)
@@ -79,11 +79,11 @@ pip install ta == 0.9.0
 ![](https://github.com/Hotshot824/stock-plotly/blob/main/img/TSLA%20Daily%20Returns%20volume.jpg?raw=true)
 
 
-# Market Module
+# Market Class
 
 ## Treemap 
 
-- [x] Market Cap (Intraday) 計算市值完成
+- [x] Treemap base is market Cap (Intraday)
 
 ![](https://github.com/Hotshot824/stock-plotly/blob/main/img/Day%20gainer.jpg?raw=true)
 
