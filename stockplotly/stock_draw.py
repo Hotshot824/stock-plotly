@@ -315,29 +315,29 @@ class Stock(basic):
         )
 
         fig.add_trace(go.Bar(x=ins.index, y=ins.totalRevenue, name="TR Year", 
-            marker=dict(color='skyblue')), row=1, col=1)
+            marker=dict(color='cornflowerblue')), row=1, col=1)
         fig.add_trace(go.Bar(x=ins.index, y=ins.costOfRevenue, name="CR Year", 
-            marker=dict(color='indianred')), row=1, col=1)
+            marker=dict(color='salmon')), row=1, col=1)
 
         fig.add_trace(go.Bar(x=ins_q.index, y=ins_q.totalRevenue, name="TR Quarterly", 
-            marker=dict(color='skyblue')), row=1, col=2)
+            marker=dict(color='royalblue')), row=1, col=2)
         fig.add_trace(go.Bar(x=ins_q.index, y=ins_q.costOfRevenue, name="CR Quarterly", 
-            marker=dict(color='indianred')), row=1, col=2)
+            marker=dict(color='firebrick')), row=1, col=2)
 
         fig.add_trace(go.Bar(x=ai_eh.index, y=ai_eh["EPS Est."], name="EPS Est.", 
-            marker=dict(color='steelblue')), row=1, col=3)
+            marker=dict(color='lightgreen')), row=1, col=3)
         fig.add_trace(go.Bar(x=ai_eh.index, y=ai_eh["EPS Actual"], name="EPS Actual", 
-            marker=dict(color='seagreen')), row=1, col=3)
+            marker=dict(color="green")), row=1, col=3)
 
         fig.add_trace(go.Bar(x=list(sheet), y=cash, name="Cash Year", 
-            marker=dict(color='skyblue')), row=2, col=1)
+            marker=dict(color='cornflowerblue')), row=2, col=1)
         fig.add_trace(go.Bar(x=list(sheet), y=tcl, name="tCL Year", 
-            marker=dict(color='indianred')), row=2, col=1)
+            marker=dict(color='salmon')), row=2, col=1)
 
-        fig.add_trace(go.Bar(x=list(sheet_q), y=cash_q, name="Cash", 
-            marker=dict(color='skyblue')), row=2, col=2)
-        fig.add_trace(go.Bar(x=list(sheet_q), y=tcl_q, name="tCL", 
-            marker=dict(color='indianred')), row=2, col=2)
+        fig.add_trace(go.Bar(x=list(sheet_q), y=cash_q, name="Cash Quarterly", 
+            marker=dict(color='royalblue')), row=2, col=2)
+        fig.add_trace(go.Bar(x=list(sheet_q), y=tcl_q, name="tCL Quarterly", 
+            marker=dict(color='firebrick')), row=2, col=2)
 
         fig.add_trace(go.Bar(x=ai_ge.index, y=ai_ge[self.__ticker.upper()], name="EPS Est.", 
             marker=dict(color='steelblue')), row=2, col=3)

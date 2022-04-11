@@ -16,6 +16,38 @@ pip install -U kaleido==0.2.1
 pip install ta == 0.9.0
 ```
 
+# Methods
+
+```
+    # Stock class methods
+    stock = sd.Stock(ticker, startdate, enddate, io_image=True)
+
+    stock.history_price()
+
+    stock.candlestick()
+
+    stock.ohlc()
+    
+    stock.compare_area("aapl")
+
+    stock.compare_index()
+
+    stock.daily_deturns()
+
+    stock.daily_deturns_volume()
+
+    stock.company_info()
+
+    # Marker class methods
+    market = sd.Market(io_image=io)
+
+    market.day_gainer_treemap()
+
+    market.day_losers_treemap()
+
+    market.day_most_active_treemap()
+```
+
 # Stock Module
 
 ## history price
