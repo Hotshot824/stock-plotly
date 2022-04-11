@@ -4,7 +4,7 @@ import stockplotly.stock_draw as sd
 
 def main():
     #stock parameter
-    ticker = "tsla"
+    ticker = "fb"
     startdate = "01/01/2020"
     enddate = "09/04/2022"
     io = True
@@ -15,7 +15,7 @@ def main():
     stock.history_price()
     stock.candlestick()
     stock.ohlc()
-    stock.compare_area("aapl")
+    stock.compare_area("msft")
     stock.compare_index()
     stock.daily_deturns()
     stock.daily_deturns_volume()
