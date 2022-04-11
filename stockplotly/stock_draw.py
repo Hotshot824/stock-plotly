@@ -315,9 +315,9 @@ class Stock(basic):
         )
 
         fig.add_trace(go.Bar(x=ins.index, y=ins.totalRevenue, name="TR Year", 
-            marker=dict(color='Orange')), row=1, col=1)
+            marker=dict(color='royalblue')), row=1, col=1)
         fig.add_trace(go.Bar(x=ins.index, y=ins.costOfRevenue, name="CR Year", 
-            marker=dict(color='salmon')), row=1, col=1)
+            marker=dict(color='firebrick')), row=1, col=1)
 
         fig.add_trace(go.Bar(x=ins_q.index, y=ins_q.totalRevenue, name="TR Quarterly", 
             marker=dict(color='royalblue')), row=1, col=2)
@@ -335,9 +335,9 @@ class Stock(basic):
             marker=dict(color='salmon')), row=2, col=1)
 
         fig.add_trace(go.Bar(x=list(sheet_q), y=cash_q, name="Cash Quarterly", 
-            marker=dict(color='royalblue')), row=2, col=2)
+            marker=dict(color='Orange')), row=2, col=2)
         fig.add_trace(go.Bar(x=list(sheet_q), y=tcl_q, name="tCL Quarterly", 
-            marker=dict(color='firebrick')), row=2, col=2)
+            marker=dict(color='salmon')), row=2, col=2)
 
         fig.add_trace(go.Bar(x=ai_ge.index, y=ai_ge[self.__ticker.upper()], name="EPS Est.", 
             marker=dict(color='steelblue')), row=2, col=3)
