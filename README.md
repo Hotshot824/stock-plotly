@@ -64,7 +64,7 @@ pip install ta == 0.9.0
 
 ## compart stock price
 
-![](https://github.com/Hotshot824/stock-plotly/blob/main/img/TSLA%20Compare%20AAPL.jpg?raw=true)
+![](https://github.com/Hotshot824/stock-plotly/blob/main/img/TSLA%20Compare%20AAPL%20Area.jpg?raw=true)
 
 ## company infomation
 

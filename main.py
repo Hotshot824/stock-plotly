@@ -1,3 +1,4 @@
+#!/home/benson/.conda/envs/data-anal/bin/python
 # -*- coding: utf-8 -*-
 
 import stockplotly.stock_draw as sd
@@ -27,3 +28,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
