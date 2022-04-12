@@ -15,7 +15,7 @@ def main():
     stock.history_price()
     stock.candlestick()
     stock.ohlc()
-    stock.compare_area("fb")
+    stock.compare_area("aapl")
     stock.compare_index()
     stock.daily_deturns()
     stock.daily_deturns_volume()
